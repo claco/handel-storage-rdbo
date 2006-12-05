@@ -8,7 +8,6 @@ BEGIN {
 };
 
 __PACKAGE__->meta->setup(
-    db      => Handel::Schema::RDBO::DB->new(domain => 'handel', type => 'bogus'),
     table   => 'cart',
     columns => [
         id          => {type => 'varchar', primary_key => 1, length => 36, not_null => 1},
@@ -18,6 +17,10 @@ __PACKAGE__->meta->setup(
         description => {type => 'varchar', length => 255}
     ]
 );
+
+sub init_db {
+    Handel::Schema::RDBO::DB->new(domain => 'handel', type => 'bogus');
+};
 
 1;
 __END__

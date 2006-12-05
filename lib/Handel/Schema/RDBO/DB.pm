@@ -7,9 +7,10 @@ BEGIN {
 };
 
 __PACKAGE__->register_db(
-    domain   => 'handel',
-    type     => 'bogus',
-    driver   => 'sqlite'
+    domain     => 'handel',
+    type       => 'bogus',
+    driver     => 'sqlite',
+    autocommit => 1
 );
 
 1;
