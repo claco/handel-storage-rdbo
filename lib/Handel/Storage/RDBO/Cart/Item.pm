@@ -3,13 +3,12 @@ use warnings;
 use strict;
 
 BEGIN {
-    use base qw/Handel::Storage::DBIC/;
+    use base qw/Handel::Storage::RDBO/;
     use Handel::Constraints qw/:all/;
 };
 
 __PACKAGE__->setup({
-    schema_class     => 'Handel::Cart::Schema',
-    schema_source    => 'Items',
+    schema_class     => 'Handel::Schema::RDBO::Cart::Item',
     currency_columns => [qw/price/],
     constraints      => {
         quantity     => {'Check Quantity' => \&constraint_quantity},

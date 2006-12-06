@@ -3,7 +3,7 @@ use warnings;
 use strict;
 
 BEGIN {
-  use Handel::Storage::Result;
+    use base qw/Handel::Storage::Result/;
 };
 
 1;

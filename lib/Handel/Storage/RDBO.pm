@@ -120,6 +120,27 @@ sub columns {
     };
 };
 
+sub create {
+    my ($self, $data) = (shift, shift);
+    my $schema = $self->schema_instance;
+    my $result_class = $self->result_class;
+
+    throw Handel::Exception::Argument(
+        -details => translate('PARAM1_NOT_HASHREF')
+    ) unless ref($data) eq 'HASH'; ## no critic
+
+    $self->set_default_values($data);
+    $self->check_constraints($data);
+    $self->validate_data($data);
+
+    my $storage_result = $schema->new(%{$data});
+    $storage_result->save(@_);
+    
+    return $result_class->create_instance(
+        $storage_result, $self
+    );
+};
+
 sub has_column {
     my ($self, $column) = @_;
 
@@ -235,19 +256,7 @@ sub txn_rollback {
 sub _configure_schema_instance {
     my ($self) = @_;
     my $schema_instance = $self->schema_instance;
-
-    # setup db
-    my $connection_info = $self->connection_info || [];
-    my $db = $schema_instance->meta->db;
-    if ($connection_info->[0]) {
-        $db->dsn($connection_info->[0]);
-    };
-    if ($connection_info->[1]) {
-        $db->username($connection_info->[1]);
-    };
-    if ($connection_info->[2]) {
-        $db->password($connection_info->[2]);
-    };    
+    my $item_storage = $self->item_storage;
 
     # change the table name
     if ($self->table_name) {
@@ -260,18 +269,29 @@ sub _configure_schema_instance {
     };
     if ($self->_columns_to_remove) {
         foreach my $column (@{$self->_columns_to_remove}) {
-            warn "deleting...$column\n";
             $schema_instance->meta->delete_column($column);
         };
     };
 
+    if ($item_storage) {
+        my $item_relationship = $schema_instance->meta->relationship($self->item_relationship);
 
+        throw Handel::Exception::Storage(-text =>
+            translate('SCHEMA_SOURCE_NO_RELATIONSHIP', $self->schema_class, $item_relationship)
+        ) unless $item_relationship; ## no critic
 
+        $item_relationship->class($item_storage->schema_instance);
 
-
+        $item_storage->schema_instance->meta->initialize;
+    };
 
     $schema_instance->meta->initialize;
 
+    # setup db
+    if (my $connection_info = $self->connection_info) {
+        my $db = Handel::Schema::RDBO::DB->new(domain => 'handel', type => 'bogus')->modify_db(%{$connection_info});
+        $schema_instance->meta->db($db);
+    };
 };
 
 1;

@@ -13,8 +13,15 @@ __PACKAGE__->meta->setup(
         id          => {type => 'varchar', primary_key => 1, length => 36, not_null => 1},
         shopper     => {type => 'varchar', length => 36, not_null => 1},
         type        => {type => 'boolean', default => 0, not_null => 1},
-        name        => {type => 'varchar', length => 50},
-        description => {type => 'varchar', length => 255}
+        name        => {type => 'varchar', length => 50, not_null => 0},
+        description => {type => 'varchar', length => 255, not_null => 0}
+    ],
+    relationships => [
+        items => {
+            type       => 'one to many',
+            class      => 'Handel::Schema::RDBO::Cart::Item',
+            column_map => {id => 'cart'}
+        }
     ]
 );
 
