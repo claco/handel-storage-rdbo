@@ -205,6 +205,47 @@ sub create {
     );
 };
 
+sub delete {
+    my ($self, $filter) = @_;
+    my $schema = $self->schema_instance;
+
+    $filter = $self->_migrate_wildcards($filter) || {};
+
+    my $resultset = Rose::DB::Object::Manager->delete_objects(
+        object_class => $schema,
+        where        => [%{$filter}]
+    );
+};
+
+sub delete_items {
+    my ($self, $result, $filter) = @_;
+    throw Handel::Exception::Argument(
+        -details => translate('NO_RESULT')
+    ) unless $result; ## no critic
+
+    throw Handel::Exception::Argument(
+        -details => translate('PARAM2_NOT_HASHREF')
+    ) unless !$filter || ref $filter eq 'HASH'; ## no critic
+
+    throw Handel::Exception::Storage(
+        -details => translate('ITEM_RELATIONSHIP_NOT_SPECIFIED')
+    ) unless $self->item_relationship; ## no critic
+
+    my $storage_result = $result->storage_result;
+    $filter = $self->_migrate_wildcards($filter) || {};
+
+    my $relationship = $storage_result->meta->relationship($self->item_relationship);
+    my $column_map = $relationship->column_map;
+    foreach my $key (keys %{$column_map}) {
+        $filter->{$column_map->{$key}} = $storage_result->$key;
+    };
+
+    return Rose::DB::Object::Manager->delete_objects(
+        object_class => $relationship->class,
+        where        => [%{$filter}]
+    );
+};
+
 sub has_column {
     my ($self, $column) = @_;
 
@@ -284,9 +325,7 @@ sub search {
     my ($self, $filter, $options) = @_;
     my $schema = $self->schema_instance;
 
-    if ($filter) {
-        $filter = $self->_migrate_wildcards($filter);
-    };
+    $filter = $self->_migrate_wildcards($filter) || {};
     $options = $self->_migrate_options($options) || {};
 
     my $resultset = Rose::DB::Object::Manager->get_objects(
