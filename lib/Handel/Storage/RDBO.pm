@@ -41,6 +41,43 @@ sub add_columns {
     return;
 };
 
+sub add_item {
+    my ($self, $result, $data) = @_;
+
+    throw Handel::Exception::Argument(
+        -details => translate('NO_RESULT')
+    ) unless $result; ## no critic
+
+    my $storage_result = $result->storage_result;
+    my $result_class = $self->result_class;
+
+    throw Handel::Exception::Argument(
+        -details => translate('PARAM2_NOT_HASHREF')
+    ) unless ref($data) eq 'HASH'; ## no critic
+
+    throw Handel::Exception::Storage(
+        -details => translate('ITEM_RELATIONSHIP_NOT_SPECIFIED')
+    ) unless $self->item_relationship; ## no critic
+
+    my $relationship = $storage_result->meta->relationship($self->item_relationship);
+    my $column_map = $relationship->column_map;
+    foreach my $key (keys %{$column_map}) {
+        $data->{$column_map->{$key}} = $storage_result->$key;
+    };
+
+    $self->item_storage->set_default_values($data);
+    $self->item_storage->check_constraints($data);
+    $self->item_storage->validate_data($data);
+
+    my $relmethod = 'add_' . $self->item_relationship;
+    my $item = $storage_result->$relmethod($data);
+    $storage_result->save;
+
+    return $result_class->create_instance(
+        $item, $self->item_storage
+    );
+};
+
 sub clone {
     my $self = shift;
 
@@ -118,6 +155,33 @@ sub columns {
     } else {
         return keys %{$self->column_accessors};
     };
+};
+
+sub count_items {
+    my ($self, $result, $filter) = @_;
+
+    throw Handel::Exception::Argument(
+        -details => translate('NO_RESULT')
+    ) unless $result; ## no critic
+
+    my $storage_result = $result->storage_result;
+
+    throw Handel::Exception::Storage(
+        -details => translate('ITEM_RELATIONSHIP_NOT_SPECIFIED')
+    ) unless $self->item_relationship; ## no critic
+
+    $filter = $self->_migrate_wildcards($filter) || {};
+
+    my $relationship = $storage_result->meta->relationship($self->item_relationship);
+    my $column_map = $relationship->column_map;
+    foreach my $key (keys %{$column_map}) {
+        $filter->{$column_map->{$key}} = $storage_result->$key;
+    };
+
+    return Rose::DB::Object::Manager->get_objects_count(
+        object_class => $relationship->class,
+        query        => [%{$filter}]
+    );
 };
 
 sub create {
@@ -216,6 +280,72 @@ sub schema_instance {
     return $self->_schema_instance;
 };
 
+sub search {
+    my ($self, $filter, $options) = @_;
+    my $schema = $self->schema_instance;
+
+    if ($filter) {
+        $filter = $self->_migrate_wildcards($filter);
+    };
+    $options = $self->_migrate_options($options) || {};
+
+    my $resultset = Rose::DB::Object::Manager->get_objects(
+        object_class => $schema,
+        query        => [%{$filter}],
+        %{$options}
+    );
+
+    my $iterator = $self->iterator_class->new({
+        data         => $resultset,
+        storage      => $self,
+        result_class => $self->result_class
+    });
+
+    return wantarray ? $iterator->all : $iterator;
+};
+
+sub search_items {
+    my ($self, $result, $filter, $options) = @_;
+
+    throw Handel::Exception::Argument(
+        -details => translate('NO_RESULT')
+    ) unless $result; ## no critic
+
+    my $storage_result = $result->storage_result;
+    my $result_class = $self->result_class;
+
+    throw Handel::Exception::Argument(
+        -details => translate('PARAM2_NOT_HASHREF')
+    ) if defined $filter && ref $filter ne 'HASH'; ## no critic
+
+    throw Handel::Exception::Storage(
+        -details => translate('ITEM_RELATIONSHIP_NOT_SPECIFIED')
+    ) unless $self->item_relationship; ## no critic
+
+    $filter = $self->_migrate_wildcards($filter) || {};
+    $options = $self->_migrate_options($options) || {};
+    
+    my $relationship = $storage_result->meta->relationship($self->item_relationship);
+    my $column_map = $relationship->column_map;
+    foreach my $key (keys %{$column_map}) {
+        $filter->{$column_map->{$key}} = $storage_result->$key;
+    };
+
+    my $resultset = Rose::DB::Object::Manager->get_objects(
+        object_class => $relationship->class,
+        query        => [%{$filter}],
+        %{$options}
+    );
+
+    my $iterator = $self->iterator_class->new({
+        data         => $resultset,
+        storage      => $self->item_storage,
+        result_class => $self->item_storage->result_class
+    });
+
+    return wantarray ? $iterator->all : $iterator;
+};
+
 sub setup {
     my ($self, $options) = @_;
 
@@ -292,6 +422,36 @@ sub _configure_schema_instance {
         my $db = Handel::Schema::RDBO::DB->new(domain => 'handel', type => 'bogus')->modify_db(%{$connection_info});
         $schema_instance->meta->db($db);
     };
+};
+
+sub _migrate_wildcards {
+    my ($self, $filter) = @_;
+
+    return unless $filter; ## no critic
+
+    if (ref $filter eq 'HASH') {
+        foreach my $key (keys %{$filter}) {
+            my $value = $filter->{$key};
+            if (!ref $filter->{$key} && $value =~ /\%/) {
+                $filter->{$key} = {like => $value}
+            };
+        };
+    };
+
+    return $filter;
+};
+
+sub _migrate_options {
+    my ($self, $options) = @_;
+
+    return unless $options; ## no critic
+
+    if (exists $options->{'order_by'}) {
+        my $order_by = delete $options->{'order_by'};
+        $options->{'sort_by'} = ref $order_by eq 'ARRAY' ? $order_by : [$order_by];
+    };
+
+    return $options;
 };
 
 1;
