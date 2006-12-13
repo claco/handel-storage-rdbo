@@ -1,3 +1,4 @@
+# $Id$
 package Handel::Storage::RDBO::Result;
 use warnings;
 use strict;

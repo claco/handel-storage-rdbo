@@ -1,3 +1,4 @@
+# $Id$
 package Handel::Schema::RDBO::DB;
 use strict;
 use warnings;
