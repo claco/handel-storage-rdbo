@@ -12,7 +12,15 @@ MANIFEST
 META.yml
 README
 t/basic.t
+t/cart_add.t
+t/cart_clear.t
 t/lib/Handel/Test.pm
+t/lib/Handel/Test/RDBO/Cart.pm
+t/lib/Handel/Test/RDBO/Cart/Item.pm
+t/lib/Handel/Test/RDBO/Storage/Cart.pm
+t/lib/Handel/Test/RDBO/Storage/Cart/Item.pm
+t/lib/Handel/Test/RDBO/Storage/Order.pm
+t/lib/Handel/Test/RDBO/Storage/Order/Item.pm
 t/lib/Handel/Test/Schema.pm
 t/manifest.t
 t/pod_coverage.t
