@@ -25,7 +25,7 @@ sub update {
         };
     };
 
-    $self->storage_result->save;
+    return $self->storage_result->save;
 };
 
 1;

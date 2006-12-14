@@ -1,7 +1,7 @@
 # $Id$
 package Handel::Storage::RDBO::Cart::Item;
-use warnings;
 use strict;
+use warnings;
 
 BEGIN {
     use base qw/Handel::Storage::RDBO/;
@@ -26,3 +26,33 @@ __PACKAGE__->setup({
 
 1;
 __END__
+
+=head1 NAME
+
+Handel::Storage::RDBO::Cart::Item - RDBO storage configuration for Handel::Cart::Item
+
+=head1 SYNOPSIS
+
+    package Handel::Cart::Item;
+    use strict;
+    use warnings;
+    use base qw/Handel::Base/;
+    
+    __PACKAGE__->storage_class('Handel::Storage::RDBO::Cart::Item');
+
+=head1 DESCRIPTION
+
+Handel::Storage::RDBO::Cart::Item is a subclass of
+L<Handel::Storage::RDBO|Handel::Storage::RDBO> that contains all of the default
+settings used by Handel::Cart::Item.
+
+=head1 SEE ALSO
+
+L<Handel::Cart::Item>, L<Handel::Storage::RDBO>
+
+=head1 AUTHOR
+
+    Christopher H. Laco
+    CPAN ID: CLACO
+    claco@chrislaco.com
+    http://today.icantfocus.com/blog/

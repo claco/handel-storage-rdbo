@@ -1,5 +1,6 @@
+# $Id$
 use strict;
-use warnings;
+use warnings FATAL => 'all';
 use ExtUtils::MakeMaker;
 
 WriteMakefile(
@@ -8,9 +9,16 @@ WriteMakefile(
     VERSION_FROM        => 'lib/Handel/Storage/RDBO.pm',
     ABSTRACT_FROM       => 'lib/Handel/Storage/RDBO.pm',
     PL_FILES            => {},
-    PREREQ_PM => {
-        'Test::More' => 0,
+    PREREQ_PM           => {
+        'Handel'           => '1.0',
+        'Rose::DB'         => '0',
+        'Rose::DB::Object' => '0'
     },
-    dist                => { COMPRESS => 'gzip -9f', SUFFIX => 'gz', },
-    clean               => { FILES => 'Handel-Storage-RDBO-*' },
+    NO_META             => 1,
+    dist                => {
+        COMPRESS        => 'gzip -9f',
+        SUFFIX          => 'gz',
+        PREOP           => 'pod2text lib/Handel/Storage/RDBO.pm > $(DISTVNAME)/README',
+    },
+    clean               => { FILES => 'Handel-Storage-RDBO-* t/var' },
 );
