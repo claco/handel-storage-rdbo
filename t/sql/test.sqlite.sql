@@ -1,4 +1,4 @@
--- $Id: test.sqlite.sql 1379 2006-08-22 02:21:53Z claco $
+-- $Id$
 CREATE TABLE cart (
 	id varchar(36) NOT NULL default '',
 	shopper varchar(36) NOT NULL default '',

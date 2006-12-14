@@ -1,4 +1,4 @@
-# $Id: Test.pm 1601 2006-11-22 18:45:35Z claco $
+# $Id$
 package Handel::Test;
 use strict;
 use warnings;

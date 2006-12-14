@@ -1,7 +1,7 @@
 # $Id$
+use ExtUtils::MakeMaker;
 use strict;
 use warnings FATAL => 'all';
-use ExtUtils::MakeMaker;
 
 WriteMakefile(
     NAME                => 'Handel::Storage::RDBO',
@@ -16,9 +16,7 @@ WriteMakefile(
     },
     NO_META             => 1,
     dist                => {
-        COMPRESS        => 'gzip -9f',
-        SUFFIX          => 'gz',
         PREOP           => 'pod2text lib/Handel/Storage/RDBO.pm > $(DISTVNAME)/README',
-    },
+    },    
     clean               => { FILES => 'Handel-Storage-RDBO-* t/var' },
 );

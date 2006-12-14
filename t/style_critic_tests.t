@@ -1,5 +1,5 @@
 #!perl -w
-# $Id: style_critic_tests.t 1569 2006-11-11 03:54:34Z claco $
+# $Id$
 use strict;
 use warnings;
 

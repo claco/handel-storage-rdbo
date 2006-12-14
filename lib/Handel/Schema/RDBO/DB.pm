@@ -1,4 +1,5 @@
 # $Id$
+## no critic (ProhibitPostfixControls, ProhibitExcessComplexity)
 package Handel::Schema::RDBO::DB;
 use strict;
 use warnings;
@@ -16,28 +17,15 @@ __PACKAGE__->register_db(
 );
 
 sub dbh {
-    my ($self, $dsn, $user, $pass, $opts) = @_;
-    my $cfg = Handel::ConfigReader->instance;
-
-    ## I hate this vs. ||=, but it just wouldn't cover on some perl versions
-    if (!$dsn) {
-        $dsn = $cfg->{'HandelDBIDSN'} || $cfg->{'db_dsn'};
-    };
-    if (!$user) {
-        $user = $cfg->{'HandelDBIUser'} || $cfg->{'db_user'};
-    };
-    if (!$pass) {
-        $pass = $cfg->{'HandelDBIPassword'} || $cfg->{'db_pass'};
-    };
-    if (!$opts) {
-        $opts = {AutoCommit => 1};
-    };
-
-    my $db_driver = $cfg->{'HandelDBIDriver'} || $cfg->{'db_driver'};
-    my $db_host   = $cfg->{'HandelDBIHost'}   || $cfg->{'db_host'};
-    my $db_port   = $cfg->{'HandelDBIPort'}   || $cfg->{'db_port'};
-    my $db_name   = $cfg->{'HandelDBIName'}   || $cfg->{'db_name'};
-
+    my $self      = shift;
+    my $cfg       = Handel::ConfigReader->instance;
+    my $dsn       = $cfg->{'HandelDBIDSN'}      || $cfg->{'db_dsn'};
+    my $user      = $cfg->{'HandelDBIUser'}     || $cfg->{'db_user'};
+    my $pass      = $cfg->{'HandelDBIPassword'} || $cfg->{'db_pass'};
+    my $db_driver = $cfg->{'HandelDBIDriver'}   || $cfg->{'db_driver'};
+    my $db_host   = $cfg->{'HandelDBIHost'}     || $cfg->{'db_host'};
+    my $db_port   = $cfg->{'HandelDBIPort'}     || $cfg->{'db_port'};
+    my $db_name   = $cfg->{'HandelDBIName'}     || $cfg->{'db_name'};
 
     if (!$dsn && $db_driver && $db_name) {
         $dsn = "dbi:$db_driver:dbname=$db_name";
@@ -77,7 +65,7 @@ Handel::Schema::RDBO::DB - RDBO DB class for the Handel::Storage::RDBO
     use Handel::Schema::RDBO::DB;
     use strict;
     use warnings;
-    
+
     my $db = Handel::Schema::RDBO::DB->new(
         domain => 'handel', type => 'bogus'
     );
@@ -86,6 +74,16 @@ Handel::Schema::RDBO::DB - RDBO DB class for the Handel::Storage::RDBO
 
 Handel::Schema::RDBO::DB is a generic Rose::DB class for use as the default
 connections used in Handel::Storage::RDBO classes.
+
+=head1 METHODS
+
+=head2 dbh
+
+Establishes a connection to the database and returns a new db object. If
+no connection information is supplied, the connection information will be read
+from C<ENV> or ModPerl using the configuration options available in the
+specified C<config_class>. By default, this will be
+L<Handel::ConfigReader|Handel::ConfigReader>.
 
 =head1 SEE ALSO
 

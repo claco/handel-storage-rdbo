@@ -1,5 +1,5 @@
 #!perl -wT
-# $Id: warnings.t 1442 2006-09-27 23:35:20Z claco $
+# $Id$
 use strict;
 use warnings;
 

@@ -1,5 +1,5 @@
 #!perl -wT
-# $Id: cart_clear.t 1590 2006-11-14 02:55:04Z claco $
+# $Id$
 use strict;
 use warnings;
 

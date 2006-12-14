@@ -9,6 +9,7 @@ lib/Handel/Storage/RDBO/Cart/Item.pm
 lib/Handel/Storage/RDBO/Result.pm
 Makefile.PL
 MANIFEST
+MANIFEST.SKIP
 META.yml
 README
 t/basic.t
