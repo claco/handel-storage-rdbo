@@ -73,9 +73,8 @@ sub add_item {
     $self->item_storage->check_constraints($data);
     $self->item_storage->validate_data($data);
 
-    my $relmethod = 'add_' . $self->item_relationship;
-    my $item = $storage_result->$relmethod($data);
-    $storage_result->save;
+    my $item = $relationship->class->new(%{$data});
+    $item->save;
 
     return $result_class->create_instance(
         $item, $self->item_storage
