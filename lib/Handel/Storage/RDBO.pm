@@ -74,7 +74,10 @@ sub add_item {
     $self->item_storage->validate_data($data);
 
     my $item = $relationship->class->new(%{$data});
-    $item->save;
+    eval {$item->save};
+    if ($@) {
+        $self->process_error($@);
+    };
 
     return $result_class->create_instance(
         $item, $self->item_storage
@@ -181,10 +184,18 @@ sub count_items {
         $filter->{$column_map->{$key}} = $storage_result->$key;
     };
 
-    return Rose::DB::Object::Manager->get_objects_count(
-        object_class => $relationship->class,
-        query        => [%{$filter}]
-    );
+    my $count = 0;
+    eval {
+        $count = Rose::DB::Object::Manager->get_objects_count(
+            object_class => $relationship->class,
+            query        => [%{$filter}]
+        );
+    };
+    if ($@) {
+        $self->process_error($@);
+    };
+
+    return $count;
 };
 
 sub create {
@@ -201,8 +212,12 @@ sub create {
     $self->validate_data($data);
 
     my $storage_result = $schema->new(%{$data});
-    $storage_result->save(@_);
-    
+
+    eval {$storage_result->save(@_)};
+    if ($@) {
+        $self->process_error($@);
+    };
+
     return $result_class->create_instance(
         $storage_result, $self
     );
@@ -214,11 +229,19 @@ sub delete {
 
     $filter = $self->_migrate_wildcards($filter) || {};
 
-    return Rose::DB::Object::Manager->delete_objects(
-        object_class => $schema,
-        where        => [%{$filter}]
-    );
-};
+    my $delete;
+    eval {
+        $delete = Rose::DB::Object::Manager->delete_objects(
+            object_class => $schema,
+            where        => [%{$filter}]
+        );
+    };
+    if ($@) {
+        $self->process_error($@);
+    };
+
+    return $delete;
+};  
 
 sub delete_items {
     my ($self, $result, $filter) = @_;
@@ -243,10 +266,18 @@ sub delete_items {
         $filter->{$column_map->{$key}} = $storage_result->$key;
     };
 
-    return Rose::DB::Object::Manager->delete_objects(
-        object_class => $relationship->class,
-        where        => [%{$filter}]
-    );
+    my $delete;
+    eval {
+        $delete = Rose::DB::Object::Manager->delete_objects(
+            object_class => $relationship->class,
+            where        => [%{$filter}]
+        );
+    };
+    if ($@) {
+        $self->process_error($@);
+    };
+
+    return $delete;
 };
 
 sub has_column {
@@ -331,11 +362,17 @@ sub search {
     $filter = $self->_migrate_wildcards($filter) || {};
     $options = $self->_migrate_options($options) || {};
 
-    my $resultset = Rose::DB::Object::Manager->get_objects(
-        object_class => $schema,
-        query        => [%{$filter}],
-        %{$options}
-    );
+    my $resultset;
+    eval {
+        $resultset = Rose::DB::Object::Manager->get_objects(
+            object_class => $schema,
+            query        => [%{$filter}],
+            %{$options}
+        );
+    };
+    if ($@) {
+        $self->process_error($@);
+    };
 
     my $iterator = $self->iterator_class->new({
         data         => $resultset,
@@ -373,11 +410,17 @@ sub search_items {
         $filter->{$column_map->{$key}} = $storage_result->$key;
     };
 
-    my $resultset = Rose::DB::Object::Manager->get_objects(
-        object_class => $relationship->class,
-        query        => [%{$filter}],
-        %{$options}
-    );
+    my $resultset;
+    eval {
+        $resultset = Rose::DB::Object::Manager->get_objects(
+            object_class => $relationship->class,
+            query        => [%{$filter}],
+            %{$options}
+        );
+    };
+    if ($@) {
+        $self->process_error($@);
+    };
 
     my $iterator = $self->iterator_class->new({
         data         => $resultset,

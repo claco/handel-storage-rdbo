@@ -9,6 +9,7 @@ BEGIN {
     use Handel::ConfigReader;
 };
 __PACKAGE__->use_private_registry;
+__PACKAGE__->default_connect_options(PrintError => 0, Warn => 0);
 __PACKAGE__->register_db(
     domain     => 'handel',
     type       => 'bogus',
