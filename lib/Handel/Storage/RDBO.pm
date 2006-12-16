@@ -491,6 +491,46 @@ sub _configure_schema_instance {
         };
     };
 
+    # add currency columns
+    if ($self->currency_columns) {
+        my $currency_class = $self->currency_class;
+        foreach my $column ($self->currency_columns) {
+            #next unless $source_class->has_column($column); ## no critic
+
+            my $column = $schema_instance->meta->column($column);
+            $column->add_trigger(
+                'inflate',
+                sub {
+                    my ($row, $value) = @_;
+                    my $codecolumn = $self->can('currency_code_column')->($self);
+                    my $storagecode = $self->can('currency_code')->($self);
+                    my $code;
+                    if ($codecolumn) {
+                        $code = $row->$codecolumn;
+                        if (!$code) {
+                            $code = $storagecode;
+                        };
+                    } else {
+                        $code = $storagecode;
+                    };
+
+                    $currency_class->new(
+                        $value,
+                        $code,
+                        $self->can('currency_format')->($self)
+                    );
+                }
+            );
+            $column->add_trigger(
+                'deflate',
+                sub {
+                    my ($self, $value) = @_;
+                    return blessed $value ? $value->value : $value;
+                }
+            );
+        };
+    };
+
     if ($item_storage) {
         my $item_relationship = $schema_instance->meta->relationship($self->item_relationship);
 
@@ -500,10 +540,10 @@ sub _configure_schema_instance {
 
         $item_relationship->class($item_storage->schema_instance);
 
-        $item_storage->schema_instance->meta->initialize;
+        $item_storage->schema_instance->meta->initialize(replace_existing => 1);
     };
 
-    $schema_instance->meta->initialize;
+    $schema_instance->meta->initialize(replace_existing => 1);
 
     # setup db
     if (my $connection_info = $self->connection_info) {
