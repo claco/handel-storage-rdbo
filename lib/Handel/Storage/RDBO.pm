@@ -231,10 +231,13 @@ sub delete {
 
     my $delete;
     eval {
-        $delete = Rose::DB::Object::Manager->delete_objects(
-            object_class => $schema,
-            where        => [%{$filter}]
-        );
+        my $results = $self->search($filter);
+        
+        while (my $result = $results->next) {
+            if ($result->delete) {
+                $delete++;
+            };
+        };
     };
     if ($@) {
         $self->process_error($@);

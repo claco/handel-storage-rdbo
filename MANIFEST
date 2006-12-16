@@ -17,6 +17,10 @@ t/cart_add.t
 t/cart_clear.t
 t/cart_create.t
 t/cart_delete.t
+t/cart_destroy.t
+t/cart_items.t
+t/cart_search.t
+t/cart_save.t
 t/lib/Handel/Test.pm
 t/lib/Handel/Test/RDBO/Cart.pm
 t/lib/Handel/Test/RDBO/Cart/Item.pm

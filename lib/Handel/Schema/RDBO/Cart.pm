@@ -9,6 +9,7 @@ BEGIN {
 };
 
 __PACKAGE__->meta->setup(
+    auto_load_related_classes => 0,
     table   => 'cart',
     columns => [
         id          => {type => 'varchar', primary_key => 1, length => 36, not_null => 1},

@@ -5,6 +5,8 @@ use strict;
 
 BEGIN {
     use base qw/Handel::Storage::Result/;
+    use Handel::Exception;
+    use Rose::DB::Object::Helpers;
 };
 
 sub delete {
@@ -18,14 +20,40 @@ sub discard_changes {
 sub update {
     my ($self, $data) = @_;
     my $storage_result = $self->storage_result;
+    my $coldata = Rose::DB::Object::Helpers::column_value_pairs($storage_result);
 
     if ($data) {
         foreach my $key (keys %{$data}) {
-            $storage_result->$key($data->{$key});
+            $coldata->{$key} = $data->{$key};
         };
     };
 
+    
+    $self->storage->check_constraints($coldata, $storage_result);
+    $self->storage->validate_data($coldata);
+
+    foreach my $key (keys %{$coldata}) {
+        $storage_result->$key($coldata->{$key});
+    };
+
     return $self->storage_result->save;
+};
+
+sub AUTOLOAD {
+    my $self = shift;
+    return if (our $AUTOLOAD) =~ /::DESTROY$/;
+
+    $AUTOLOAD =~ s/^.*:://;
+
+    my $result;
+    eval {
+        $result = $self->storage_result->$AUTOLOAD(@_);
+    };
+    if ($@) {
+        throw Handel::Exception::Constraint(-details => $@);
+    };
+
+    return $result;
 };
 
 1;
