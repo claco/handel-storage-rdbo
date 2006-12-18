@@ -3,9 +3,13 @@ lib/Handel/Iterator/RDBO.pm
 lib/Handel/Schema/RDBO/Cart.pm
 lib/Handel/Schema/RDBO/Cart/Item.pm
 lib/Handel/Schema/RDBO/DB.pm
+lib/Handel/Schema/RDBO/Order.pm
+lib/Handel/Schema/RDBO/Order/Item.pm
 lib/Handel/Storage/RDBO.pm
 lib/Handel/Storage/RDBO/Cart.pm
 lib/Handel/Storage/RDBO/Cart/Item.pm
+lib/Handel/Storage/RDBO/Order.pm
+lib/Handel/Storage/RDBO/Order/Item.pm
 lib/Handel/Storage/RDBO/Result.pm
 Makefile.PL
 MANIFEST
