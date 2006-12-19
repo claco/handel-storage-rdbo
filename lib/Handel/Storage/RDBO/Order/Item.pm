@@ -31,7 +31,7 @@ __END__
 
 =head1 NAME
 
-Handel::Storage::DBIC::Order::Item - RDBO storage configuration for Handel::Order::Item
+Handel::Storage::RDBO::Order::Item - RDBO storage configuration for Handel::Order::Item
 
 =head1 SYNOPSIS
 
