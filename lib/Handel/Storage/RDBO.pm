@@ -64,6 +64,10 @@ sub add_item {
     ) unless $self->item_relationship; ## no critic
 
     my $relationship = $storage_result->meta->relationship($self->item_relationship);
+    throw Handel::Exception::Storage(
+        -details => translate('ITEM_RELATIONSHIP_NOT_SPECIFIED')
+    ) unless $relationship; ## no critic
+
     my $column_map = $relationship->column_map;
     foreach my $key (keys %{$column_map}) {
         $data->{$column_map->{$key}} = $storage_result->$key;
@@ -179,6 +183,10 @@ sub count_items {
     $filter = $self->_migrate_wildcards($filter) || {};
 
     my $relationship = $storage_result->meta->relationship($self->item_relationship);
+    throw Handel::Exception::Storage(
+        -details => translate('ITEM_RELATIONSHIP_NOT_SPECIFIED')
+    ) unless $relationship; ## no critic
+
     my $column_map = $relationship->column_map;
     foreach my $key (keys %{$column_map}) {
         $filter->{$column_map->{$key}} = $storage_result->$key;
@@ -264,6 +272,10 @@ sub delete_items {
     $filter = $self->_migrate_wildcards($filter) || {};
 
     my $relationship = $storage_result->meta->relationship($self->item_relationship);
+    throw Handel::Exception::Storage(
+        -details => translate('ITEM_RELATIONSHIP_NOT_SPECIFIED')
+    ) unless $relationship; ## no critic
+
     my $column_map = $relationship->column_map;
     foreach my $key (keys %{$column_map}) {
         $filter->{$column_map->{$key}} = $storage_result->$key;
@@ -406,8 +418,12 @@ sub search_items {
 
     $filter = $self->_migrate_wildcards($filter) || {};
     $options = $self->_migrate_options($options) || {};
-    
+
     my $relationship = $storage_result->meta->relationship($self->item_relationship);
+    throw Handel::Exception::Storage(
+        -details => translate('ITEM_RELATIONSHIP_NOT_SPECIFIED')
+    ) unless $relationship; ## no critic
+
     my $column_map = $relationship->column_map;
     foreach my $key (keys %{$column_map}) {
         $filter->{$column_map->{$key}} = $storage_result->$key;
@@ -495,9 +511,9 @@ sub _configure_schema_instance {
     if ($self->currency_columns) {
         my $currency_class = $self->currency_class;
         foreach my $column ($self->currency_columns) {
-            #next unless $source_class->has_column($column); ## no critic
-
             my $column = $schema_instance->meta->column($column);
+            next unless $column; ## no critic
+
             $column->add_trigger(
                 'inflate',
                 sub {
