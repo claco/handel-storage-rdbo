@@ -12,7 +12,9 @@ WriteMakefile(
     PREREQ_PM           => {
         'Handel'           => '1.0',
         'Rose::DB'         => '0',
-        'Rose::DB::Object' => '0'
+        'Rose::DB::Object' => '0',
+        'Clone'            => '0',
+        'Scalar::Util'     => '0'
     },
     NO_META             => 1,
     dist                => {

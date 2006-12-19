@@ -331,6 +331,7 @@ sub has_column {
     my ($self, $column) = @_;
 
     if ($self->_schema_instance) {
+        ## no critic (RequireBlockGrep)
         return scalar grep(/$column/, $self->schema_instance->meta->column_names);
     } else {
         return $self->SUPER::has_column($column);
