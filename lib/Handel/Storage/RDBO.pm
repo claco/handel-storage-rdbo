@@ -95,15 +95,13 @@ sub clone {
         -details => translate('NOT_CLASS_METHOD')
     ) unless blessed($self); ## no critic
 
-    # a hack indeed. clone barfs on some DBI inards, so lets move out the
-    # schema instance while we clone and put it back
     if ($self->_schema_instance) {
-        my $db = $self->_schema_instance->meta->db;
-        $self->_schema_instance->meta->db(undef);
+        my $schema_instance = $self->_schema_instance;
+        $self->_schema_instance(undef);
 
         my $clone = Clone::clone($self);
 
-        $self->_schema_instance->meta->db($db);
+        $self->_schema_instance($schema_instance);
 
         return $clone;
     } else {
@@ -116,7 +114,7 @@ sub column_accessors {
     my $accessors = {};
 
     if ($self->_schema_instance) {
-        my @columns = $self->_schema_instance->columns;
+        my @columns = $self->_schema_instance->meta->columns;
         foreach my $column (@columns) {
             my $accessor = $column->alias;
             if (!$accessor) {
@@ -165,6 +163,35 @@ sub columns {
     } else {
         return keys %{$self->column_accessors};
     };
+};
+
+sub copyable_item_columns {
+    my $self = shift;
+
+    throw Handel::Exception::Storage(
+        -details => translate('ITEM_RELATIONSHIP_NOT_SPECIFIED')
+    ) unless $self->item_relationship; ## no critic
+
+    throw Handel::Exception::Storage(
+        -details => translate('ITEM_STORAGE_NOT_DEFINED')
+    ) unless $self->item_storage; ## no critic
+
+    my $schema_instance = $self->schema_instance;
+    my @copyable;
+    my %primaries = map {$_ => 1} $self->item_storage->primary_columns;
+    my %foreigns;
+
+    if (my $relationship = $schema_instance->meta->relationship($self->item_relationship)) {
+        %foreigns = map {$_ => 1} values %{$relationship->column_map};
+    };
+
+    foreach ($self->item_storage->columns) {
+        if (!exists $primaries{$_} && !exists $foreigns{$_}) {
+            push @copyable, $_;
+        };
+    };
+
+    return @copyable;
 };
 
 sub count_items {
@@ -299,7 +326,7 @@ sub has_column {
     my ($self, $column) = @_;
 
     if ($self->_schema_instance) {
-        return grep {$column} ($self->schema_instance->meta->column_names);
+        return scalar grep(/$column/, $self->schema_instance->meta->column_names);
     } else {
         return $self->SUPER::has_column($column);
     };
@@ -310,7 +337,7 @@ sub primary_columns {
 
     if ($self->_schema_instance) {
         if (@columns) {
-            $self->schema_instance->meta->primary_key_column_names(@columns);
+            $self->schema_instance->meta->primary_key_columns(@columns);
         };
 
         return $self->schema_instance->meta->primary_key_column_names;
@@ -456,6 +483,10 @@ sub setup {
     throw Handel::Exception::Argument(
         -details => translate('PARAM1_NOT_HASHREF')
     ) unless ref($options) eq 'HASH'; ## no critic
+
+    throw Handel::Exception::Storage(
+        -details => translate('SETUP_EXISTING_SCHEMA')
+    ) if $self->_schema_instance; ## no critic
 
     # make ->columns/column_accessors w/o happy schema_instance/source
     foreach my $setting (qw/schema_class/) {
