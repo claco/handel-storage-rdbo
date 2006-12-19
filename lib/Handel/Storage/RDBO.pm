@@ -77,8 +77,11 @@ sub add_item {
     $self->item_storage->check_constraints($data);
     $self->item_storage->validate_data($data);
 
-    my $item = $relationship->class->new(%{$data});
-    eval {$item->save};
+    my $item;
+    eval {
+        $item = $relationship->class->new(%{$data});
+        $item->save
+    };
     if ($@) {
         $self->process_error($@);
     };
@@ -246,9 +249,11 @@ sub create {
     $self->check_constraints($data);
     $self->validate_data($data);
 
-    my $storage_result = $schema->new(%{$data});
-
-    eval {$storage_result->save(@_)};
+    my $storage_result;
+    eval {
+        $storage_result = $schema->new(%{$data});
+        $storage_result->save(@_)
+    };
     if ($@) {
         $self->process_error($@);
     };
@@ -582,14 +587,13 @@ sub _configure_schema_instance {
         my $item_relationship = $schema_instance->meta->relationship($self->item_relationship);
 
         throw Handel::Exception::Storage(-text =>
-            translate('SCHEMA_SOURCE_NO_RELATIONSHIP', $self->schema_class, $item_relationship)
+            translate('SCHEMA_SOURCE_NO_RELATIONSHIP', $self->schema_class, $self->item_relationship)
         ) unless $item_relationship; ## no critic
 
         $item_relationship->class($item_storage->schema_instance);
 
         $item_storage->schema_instance->meta->initialize(replace_existing => 1);
     };
-
     $schema_instance->meta->initialize(replace_existing => 1);
 
     # setup db

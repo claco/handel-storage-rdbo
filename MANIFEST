@@ -65,6 +65,11 @@ t/storage_rdbo_delete_items.t
 t/storage_rdbo_has_column.t
 t/storage_rdbo_primary_columns.t
 t/storage_rdbo_setup.t
+t/storage_rdbo_connection_info.t
+t/storage_rdbo_process_error.t
+t/storage_rdbo_remove_columns.t
+t/storage_rdbo_schema_class.t
+t/storage_rdbo_schema_instance.t
 t/order_add.t
 t/order_clear.t
 t/order_create.t
