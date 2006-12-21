@@ -598,9 +598,10 @@ sub _configure_schema_instance {
     $schema_instance->meta->initialize(replace_existing => 1);
 
     # setup db
-    if (my $connection_info = $self->connection_info) {
-        my $db = Handel::Schema::RDBO::DB->new(domain => 'handel', type => 'bogus')->modify_db(%{$connection_info});
-        $schema_instance->meta->db($db);
+    if ($self->connection_info) {
+        $schema_instance->meta->db(
+            Handel::Schema::RDBO::DB->get_db(@{$self->connection_info})
+        );
     };
 
     return;
@@ -804,19 +805,37 @@ See L<Handel::Storage/columns> for more information about this method.
 
 =over
 
-=item Arguments: \%info
+=item Arguments: \@info
 
 =back
 
 Gets/sets the connection information used when connecting to the database.
 
-    $storage->connection_info({
-        dsn => 'dbi:mysql:foo',
-        username => 'user',
-        password => 'pass'
-    });
+    $storage->connection_info(['dbi:mysql:foo', 'user', 'pass', {PrintError=>1}]);
 
-See L<Rose::DB> for more information about the available connection attributes.
+The info argument is an array ref that holds the following values:
+
+=over
+
+=item $dsn
+
+The DBI dsn to use to connect to.
+
+=item $username
+
+The username for the database you are connecting to.
+
+=item $password
+
+The password for the database you are connecting to.
+
+=item \%attr
+
+The attributes to be pass to DBI for this connection.
+
+=back
+
+See L<DBI> for more information about dsns and connection attributes.
 
 =head2 copyable_item_columns
 

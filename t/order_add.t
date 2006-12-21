@@ -26,6 +26,7 @@ BEGIN {
 
 ## This is a hack, but it works. :-)
 my $schema = Handel::Test->init_schema(no_populate => 1);
+$ENV{'HandelDBIDSN'} = $schema->dsn;
 
 &run('Handel::Test::RDBO::Order', 'Handel::Test::RDBO::Order::Item', 1);
 
@@ -33,7 +34,6 @@ sub run {
     my ($subclass, $itemclass, $dbsuffix) = @_;
 
     Handel::Test->populate_schema($schema, clear => 1);
-    local $ENV{'HandelDBIDSN'} = $schema->dsn;
 
 
     ## test for Handel::Exception::Argument where first param is not a hashref

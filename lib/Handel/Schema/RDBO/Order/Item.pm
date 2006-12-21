@@ -4,8 +4,7 @@ use strict;
 use warnings;
 
 BEGIN {
-    use base qw/Rose::DB::Object/;
-    use Handel::Schema::RDBO::DB;
+    use base qw/Handel::Schema::RDBO::Object/;
 };
 
 __PACKAGE__->meta->setup(
@@ -20,10 +19,6 @@ __PACKAGE__->meta->setup(
         description => {type => 'varchar', length => 255, default => undef, not_null => 0}
     ]
 );
-
-sub init_db {
-    return Handel::Schema::RDBO::DB->new(domain => 'handel', type => 'bogus');
-};
 
 1;
 __END__

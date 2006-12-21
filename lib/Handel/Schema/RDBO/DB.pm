@@ -7,51 +7,88 @@ use warnings;
 BEGIN {
     use base qw/Rose::DB/;
     use Handel::ConfigReader;
+    require DBI;
 };
 __PACKAGE__->use_private_registry;
 __PACKAGE__->default_connect_options(PrintError => 0, Warn => 0);
-__PACKAGE__->register_db(
-    domain     => 'handel',
-    type       => 'bogus',
-    driver     => 'sqlite',
-    autocommit => 1
-);
 
-sub dbh {
-    my $self      = shift;
-    my $cfg       = Handel::ConfigReader->instance;
-    my $dsn       = $cfg->{'HandelDBIDSN'}      || $cfg->{'db_dsn'};
-    my $user      = $cfg->{'HandelDBIUser'}     || $cfg->{'db_user'};
-    my $pass      = $cfg->{'HandelDBIPassword'} || $cfg->{'db_pass'};
-    my $db_driver = $cfg->{'HandelDBIDriver'}   || $cfg->{'db_driver'};
-    my $db_host   = $cfg->{'HandelDBIHost'}     || $cfg->{'db_host'};
-    my $db_port   = $cfg->{'HandelDBIPort'}     || $cfg->{'db_port'};
-    my $db_name   = $cfg->{'HandelDBIName'}     || $cfg->{'db_name'};
+foreach my $driver (qw/pg mysql sqlite informix oracle/) {
+    __PACKAGE__->register_db(
+        domain     => 'handel',
+        type       => $driver, 
+        driver     => $driver,
+        autocommit => 1
+    );
+};
 
-    if (!$dsn && $db_driver && $db_name) {
-        $dsn = "dbi:$db_driver:dbname=$db_name";
+# this needs to be factored into ConfigReader!
+sub get_db {
+    my ($self, $dsn, $user, $pass, $opts) = @_;
+    my $cfg = Handel::ConfigReader->instance;
+    my %args = (
+        dsn             => $dsn,
+        username        => $user,
+        password        => $pass,
+        connect_options => $opts
+    );
 
-        if ($db_host) {
-            $dsn .= ";host=$db_host";
+    ## I hate this vs. ||=, but it just wouldn't cover on some perl versions
+    if (!$args{'dsn'}) {
+        $args{'dsn'} = $cfg->{'HandelDBIDSN'} || $cfg->{'db_dsn'};
+    };
+    if (!$args{'username'}) {
+        $args{'username'} = $cfg->{'HandelDBIUser'} || $cfg->{'db_user'};
+    };
+    if (!$args{'password'}) {
+        $args{'password'} = $cfg->{'HandelDBIPassword'} || $cfg->{'db_pass'};
+    };
+    if (!$args{'connect_options'}) {
+        $args{'connect_options'} = {AutoCommit => 1};
+    };
+
+    if ($args{'dsn'}) {
+        my ($scheme, $driver, $attr_string, $attr_hash, $driver_dsn) = DBI->parse_dsn($args{'dsn'});
+        $args{'driver'} = $driver;
+        $args{'connect_options'} = {%{$args{'connect_options'}}, %{$attr_hash || {}}};
+
+        if ($driver_dsn =~ /^(.*)@(.*)$/) {
+            $args{'database'} = $1;
+            ($args{'host'} , $args{'port'}) = split(/:/, $2);
+        } elsif ($driver_dsn =~ /(;|=)/) {
+            if ($driver_dsn =~ /(dbname|db|database)=(.*?)(;|$)/i) {
+                $args{'database'} = $2;
+            };
+            if ($driver_dsn =~ /port=(.*?)(;|$)/i) {
+                $args{'port'} = $1;
+            };
+            if ($driver_dsn =~ /(host|hostname|server)=(.*?)(;|$)/i) {
+                $args{'host'} = $2;
+            };
+        } else {
+            $args{'database'} =  $driver_dsn;
+        };
+    } else {
+        $args{'driver'}   = $cfg->{'HandelDBIDriver'} || $cfg->{'db_driver'} || 'SQLite';
+        $args{'host'}     = $cfg->{'HandelDBIHost'}   || $cfg->{'db_host'}   || '';
+        $args{'port'}     = $cfg->{'HandelDBIPort'}   || $cfg->{'db_port'}   || '';
+        $args{'database'} = $cfg->{'HandelDBIName'}   || $cfg->{'db_name'}   || '';
+
+        $args{'dsn'} = 'dbi:' . $args{'driver'} . ':dbname=' . $args{'database'};
+
+        if ($args{'host'}) {
+            $args{'dsn'} .= ';host=' . $args{'host'};
         };
 
-        if ($db_host && $db_port) {
-            $dsn .= ";port=$db_port";
+        if ($args{'host'} && $args{'port'}) {
+            $args{'dsn'} .= ';port=' . $args{'port'};
         };
     };
 
-    my $args = {};
-    $args->{'dsn'} = $dsn if $dsn;
-    $args->{'driver'} = $db_driver if $db_driver;
-    $args->{'host'} = $db_host if $db_host;
-    $args->{'port'} = $db_port if $db_port;
-    $args->{'database'} = $db_name if $db_name;
-    $args->{'username'} = $user if $user;
-    $args->{'password'} = $pass if $pass;
-
-    $self->modify_db(%{$args}, domain => 'handel', type => 'bogus');
-
-    return $self->SUPER::dbh;
+    return $self->new(
+        domain => 'handel',
+        type   => lc($args{'driver'}),
+        %args
+    );
 };
 
 1;
@@ -78,13 +115,12 @@ connections used in Handel::Storage::RDBO classes.
 
 =head1 METHODS
 
-=head2 dbh
+=head2 get_db
 
-Establishes a connection to the database and returns a new db object. If
-no connection information is supplied, the connection information will be read
-from C<ENV> or ModPerl using the configuration options available in the
-specified C<config_class>. By default, this will be
-L<Handel::ConfigReader|Handel::ConfigReader>.
+Returns a new pre configured db object. If no connection information is supplied,
+the connection information will be read from C<ENV> or ModPerl using the
+configuration options available in the specified C<config_class>. By default,
+this will be L<Handel::ConfigReader|Handel::ConfigReader>.
 
 =head1 SEE ALSO
 
