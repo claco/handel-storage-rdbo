@@ -39,20 +39,20 @@ BEGIN {
     is($db->password, 'mypass', 'password is set');
     is($db->port, undef, 'port is not set');
     is($db->driver, 'mysql', 'driver is set');
-    is($db->dsn, 'dbi:mysql:mydatabase@myserver', 'dsn is set');
+    is($db->dsn, 'dbi:mysql:database=mydatabase;host=myserver', 'dsn is set');
 };
 
 
 ## server@host:port style dsn
 {
-    my $db = Handel::Schema::RDBO::DB->get_db('dbi:Oracle:mydatabase@myserver:8080', 'myuser', 'mypass');
+    my $db = Handel::Schema::RDBO::DB->get_db('dbi:mysql:mydatabase@myserver:8080', 'myuser', 'mypass');
     is($db->database, 'mydatabase', 'database is set');
     is($db->host, 'myserver', 'server is set');
     is($db->username, 'myuser', 'user is set');
     is($db->password, 'mypass', 'password is set');
     is($db->port, 8080, 'port is set');
-    is($db->driver, 'oracle', 'driver is set');
-    is($db->dsn, 'dbi:Oracle:mydatabase@myserver:8080', 'dsn is set');
+    is($db->driver, 'mysql', 'driver is set');
+    is($db->dsn, 'dbi:mysql:database=mydatabase;host=myserver;port=8080', 'dsn is set');
 };
 
 
@@ -65,44 +65,44 @@ BEGIN {
     is($db->password, 'mypass', 'password is set');
     is($db->port, undef, 'port is not set');
     is($db->driver, 'pg', 'driver is set');
-    is($db->dsn, 'dbi:Pg:mydatabase', 'dsn is set');
+    is($db->dsn, 'dbi:Pg:dbname=mydatabase', 'dsn is set');
 };
 
 
 ## :dbname=;host=;port= style dsn
 {
-    my $db = Handel::Schema::RDBO::DB->get_db('dbi:SQLite:dbname=mydatabase;host=localhost;port=4133', 'myuser', 'mypass');
+    my $db = Handel::Schema::RDBO::DB->get_db('dbi:mysql:dbname=mydatabase;host=localhost;port=4133', 'myuser', 'mypass');
     is($db->database, 'mydatabase', 'database is set');
     is($db->host, 'localhost', 'server is set');
     is($db->username, 'myuser', 'user is set');
     is($db->password, 'mypass', 'password is set');
     is($db->port, 4133, 'port is set');
-    is($db->driver, 'sqlite', 'driver is set');
-    is($db->dsn, 'dbi:SQLite:dbname=mydatabase;host=localhost;port=4133', 'dsn is set');
+    is($db->driver, 'mysql', 'driver is set');
+    is($db->dsn, 'dbi:mysql:database=mydatabase;host=localhost;port=4133', 'dsn is set');
 };
 
 
 ## :dbname=;host=;port= style dsn
 {
-    my $db = Handel::Schema::RDBO::DB->get_db('dbi:SQLite:db=mydatabase;server=localhost;port=4133', 'myuser', 'mypass');
+    my $db = Handel::Schema::RDBO::DB->get_db('dbi:mysql:db=mydatabase;server=localhost;port=4133', 'myuser', 'mypass');
     is($db->database, 'mydatabase', 'database is set');
     is($db->host, 'localhost', 'server is set');
     is($db->username, 'myuser', 'user is set');
     is($db->password, 'mypass', 'password is set');
     is($db->port, 4133, 'port is set');
-    is($db->driver, 'sqlite', 'driver is set');
-    is($db->dsn, 'dbi:SQLite:db=mydatabase;server=localhost;port=4133', 'dsn is set');
+    is($db->driver, 'mysql', 'driver is set');
+    is($db->dsn, 'dbi:mysql:database=mydatabase;host=localhost;port=4133', 'dsn is set');
 };
 
 
 ## :dbname=;host=;port= style dsn
 {
-    my $db = Handel::Schema::RDBO::DB->get_db('dbi:SQLite:database=mydatabase;hostname=localhost;port=4133', 'myuser', 'mypass');
+    my $db = Handel::Schema::RDBO::DB->get_db('dbi:mysql:database=mydatabase;hostname=localhost;port=4133', 'myuser', 'mypass');
     is($db->database, 'mydatabase', 'database is set');
     is($db->host, 'localhost', 'server is set');
     is($db->username, 'myuser', 'user is set');
     is($db->password, 'mypass', 'password is set');
     is($db->port, 4133, 'port is set');
-    is($db->driver, 'sqlite', 'driver is set');
-    is($db->dsn, 'dbi:SQLite:database=mydatabase;hostname=localhost;port=4133', 'dsn is set');
+    is($db->driver, 'mysql', 'driver is set');
+    is($db->dsn, 'dbi:mysql:database=mydatabase;host=localhost;port=4133', 'dsn is set');
 };

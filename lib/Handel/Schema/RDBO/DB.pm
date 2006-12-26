@@ -84,6 +84,10 @@ sub get_db {
         };
     };
 
+    ## not using dsn due now that recent Rose::DB knows more about dsns
+    ## than we do
+    delete $args{'dsn'};
+
     return $self->new(
         domain => 'handel',
         type   => lc($args{'driver'}),
