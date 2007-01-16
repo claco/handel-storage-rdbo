@@ -1,8 +1,0 @@
-# $Id$
-# Remember to Id keyword our files
-[Miscellanea::RequireRcsKeywords]
-keywords = Id
-
-# use Handel::Test
-[TestingAndDebugging::RequireTestLabels]
-modules = Handel::Test
