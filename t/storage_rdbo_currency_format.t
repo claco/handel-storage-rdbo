@@ -31,37 +31,37 @@ my $storage = Handel::Storage::RDBO->new({
 
 my $item = $storage->search->first;
 isa_ok($item->price, 'Handel::Currency');
-is($item->price->_format, 'FMT_NAME', 'format was set');
-is($item->price->format, '1.11 US Dollar', 'got long format name');
+is($item->price->format, 'FMT_NAME', 'format was set');
+is($item->price->stringify, '1.11 US Dollar', 'got long format name');
 
 
 
 $storage->currency_format('FMT_HTML');
 $item = $storage->search->first;
 isa_ok($item->price, 'Handel::Currency');
-is($item->price->_format, 'FMT_HTML', 'format was set');
-is($item->price->format, '&#x0024;1.11', 'got html format');
+is($item->price->format, 'FMT_HTML', 'format was set');
+is($item->price->stringify, '&#x0024;1.11', 'got html format');
 
 
 $storage->currency_format(undef);
 $item = $storage->search->first;
 isa_ok($item->price, 'Handel::Currency');
-is($item->price->_format, undef, 'format is not set');
-is($item->price->format, '1.11 USD', 'got short format');
+is($item->price->format, 'FMT_STANDARD', 'format is not set');
+is($item->price->stringify, '1.11 USD', 'got short format');
 
 
 {
     local $ENV{'HandelCurrencyFormat'} = 'FMT_NAME';
     my $item = $storage->search->first;
     isa_ok($item->price, 'Handel::Currency');
-    is($item->price->_format, undef, 'no format is set');
-    is($item->price->format, '1.11 US Dollar', 'got long format');
+    is($item->price->format, 'FMT_NAME', 'no format is set');
+    is($item->price->stringify, '1.11 US Dollar', 'got long format');
 };
 
 
 {
     my $item = $storage->search->first;
     isa_ok($item->price, 'Handel::Currency');
-    is($item->price->_format, undef, 'no format is set');
-    is($item->price->format, '1.11 USD', 'for short name format');
+    is($item->price->format, 'FMT_STANDARD', 'no format is set');
+    is($item->price->stringify, '1.11 USD', 'for short name format');
 };

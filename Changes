@@ -1,5 +1,9 @@
 Revision history for Handel-Storage-RDBO
 
+0.02000
+    - Converted to Module::Install
+    - Updated tests after Handel Currency changes
+
 0.01_03
     - Removed t/style_critic_tests. ETOOMUCHWORKFORLITTLEBENEFIT
 

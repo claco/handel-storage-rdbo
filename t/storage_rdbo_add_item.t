@@ -41,7 +41,7 @@ isa_ok($item, $storage->result_class);
 is($item->id, '99999999-9999-9999-9999-999999999999', 'got id');
 is($item->sku, 'ABC-123', 'got sku');
 is($item->quantity, 2, 'got quantity');
-is($item->price, 2.22, 'got price');
+is($item->price+0, 2.22, 'got price');
 
 
 ## throw exception if no result is passed
