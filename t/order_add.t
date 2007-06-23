@@ -96,15 +96,15 @@ sub run {
         is($item->orderid, $order->id);
         is($item->sku, 'SKU9999');
         is($item->quantity, 2);
-        is($item->price, 1.11);
+        is($item->price+0, 1.11);
         is($item->description, 'Line Item SKU 9');
-        is($item->total, 2.22);
+        is($item->total+0, 2.22);
         if ($itemclass ne 'Handel::Order::Item') {
             #is($item->custom, 'custom');
         };
 
         is($order->count, 3);
-        is($order->subtotal, 5.55);
+        is($order->subtotal+0, 5.55);
 
         my $reit = $subclass->search({
             id => '11111111-1111-1111-1111-111111111111'
@@ -127,9 +127,9 @@ sub run {
         is($reitem->orderid, $reorder->id);
         is($reitem->sku, 'SKU9999');
         is($reitem->quantity, 2);
-        is($reitem->price, 1.11);
+        is($reitem->price+0, 1.11);
         is($reitem->description, 'Line Item SKU 9');
-        is($reitem->total, 2.22);
+        is($reitem->total+0, 2.22);
         if ($itemclass ne 'Handel::Order::Item') {
             #is($reitem->custom, 'custom');
         };
@@ -170,15 +170,15 @@ sub run {
         is($item->orderid, $order->id);
         is($item->sku, 'SKU8888');
         is($item->quantity, 1);
-        is($item->price, 1.11);
+        is($item->price+0, 1.11);
         is($item->description, 'Line Item SKU 8');
-        is($item->total, 2.22);
+        is($item->total+0, 2.22);
         if ($itemclass ne 'Handel::Order::Item') {
             #is($item->custom, 'custom');
         };
 
         is($order->count, 2);
-        is($order->subtotal, 5.55);
+        is($order->subtotal+0, 5.55);
 
         my $reit = $subclass->search({
             id => '22222222-2222-2222-2222-222222222222'
@@ -201,9 +201,9 @@ sub run {
         is($reitem->orderid, $reorder->id);
         is($reitem->sku, 'SKU8888');
         is($reitem->quantity, 1);
-        is($reitem->price, 1.11);
+        is($reitem->price+0, 1.11);
         is($reitem->description, 'Line Item SKU 8');
-        is($reitem->total, 2.22);
+        is($reitem->total+0, 2.22);
         if ($itemclass ne 'Handel::Order::Item') {
             #is($reitem->custom, 'custom');
         };
@@ -237,15 +237,15 @@ sub run {
         is($item->orderid, $order->id);
         is($item->sku, 'SKU9999');
         is($item->quantity, 2);
-        is($item->price, 1.11);
+        is($item->price+0, 1.11);
         is($item->description, 'Line Item SKU 9');
-        is($item->total, 2.22);
+        is($item->total+0, 2.22);
         if ($itemclass ne 'Handel::Order::Item') {
             #is($item->custom, undef);
         };
 
         is($order->count, 3);
-        is($order->subtotal, 5.55);
+        is($order->subtotal+0, 5.55);
 
         my $reit = $subclass->search({
             id => '22222222-2222-2222-2222-222222222222'
@@ -268,9 +268,9 @@ sub run {
         is($reitem->orderid, $reorder->id);
         is($reitem->sku, 'SKU9999');
         is($reitem->quantity, 2);
-        is($reitem->price, 1.11);
+        is($reitem->price+0, 1.11);
         is($reitem->description, 'Line Item SKU 9');
-        is($reitem->total, 2.22);
+        is($reitem->total+0, 2.22);
         if ($itemclass ne 'Handel::Order::Item') {
             #is($reitem->custom, undef);
         };
@@ -310,12 +310,12 @@ sub run {
     is($item->orderid, $order->id);
     is($item->sku, 'SKU8989');
     is($item->quantity, 1);
-    is($item->price, 1.11);
+    is($item->price+0, 1.11);
     is($item->description, 'Line Item SKU 8');
-    is($item->total, 0);
+    is($item->total+0, 0);
 
     is($order->count, 4);
-    is($order->subtotal, 5.55);
+    is($order->subtotal+0, 5.55);
 
     my $reorderit = Handel::Test::RDBO::Order->search({
         id => '22222222-2222-2222-2222-222222222222'
@@ -336,9 +336,9 @@ sub run {
     is($reitem->orderid, $order->id);
     is($reitem->sku, 'SKU8989');
     is($reitem->quantity, 1);
-    is($reitem->price, 1.11);
+    is($reitem->price+0, 1.11);
     is($reitem->description, 'Line Item SKU 8');
-    is($reitem->total, 0);
+    is($reitem->total+0, 0);
 };
 
 
@@ -377,12 +377,12 @@ sub run {
     is($item->orderid, $order->id);
     is($item->sku, 'SKU9898');
     is($item->quantity, 1);
-    is($item->price, 0);
+    is($item->price+0, 0);
     is($item->description, undef);
-    is($item->total, 0);
+    is($item->total+0, 0);
 
     is($order->count, 5);
-    is($order->subtotal, 5.55);
+    is($order->subtotal+0, 5.55);
 
     my $reorderit = Handel::Test::RDBO::Order->search({
         id => '22222222-2222-2222-2222-222222222222'
@@ -403,7 +403,7 @@ sub run {
     is($reitem->orderid, $order->id);
     is($reitem->sku, 'SKU9898');
     is($reitem->quantity, 1);
-    is($reitem->price, 0);
+    is($reitem->price+0, 0);
     is($reitem->description, undef);
-    is($reitem->total, 0);
+    is($reitem->total+0, 0);
 };

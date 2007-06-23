@@ -6,8 +6,13 @@
 ^pm_to_blib
 ^MakeMaker-\d
 Makefile$
+Build.PL
 Makefile.old$
 \.db
 t/TEST$
 t/SMOKE$
 ^blibdirs\.ts
+\bBuild$
+\b_build
+Build.PL
+Build.bat

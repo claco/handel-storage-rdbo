@@ -50,7 +50,7 @@ allow = $@
 [-CodeLayout::ProhibitParensWithBuiltins]
 
 # Don't use it
-[-Editor::RequireEmacsFileVariables]
+#[-Editor::RequireEmacsFileVariables]
 
 # I agree, just not here.
-[-ValuesAndExpressions::ProhibitMagicNumbers]
+#[-ValuesAndExpressions::ProhibitMagicNumbers]

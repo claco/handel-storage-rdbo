@@ -15,7 +15,7 @@ __PACKAGE__->default_connect_options(PrintError => 0, Warn => 0);
 foreach my $driver (qw/pg mysql sqlite informix oracle/) {
     __PACKAGE__->register_db(
         domain     => 'handel',
-        type       => $driver, 
+        type       => $driver,
         driver     => $driver,
         autocommit => 1
     );

@@ -351,7 +351,7 @@ sub run {
     is($order->shopper, '88888888-8888-8888-8888-888888888888');
     is($order->type, ORDER_TYPE_SAVED);
     is($order->count, 0);
-    is($order->subtotal, 0);
+    is($order->subtotal+0, 0);
     is(refaddr $order->result->storage, refaddr $storage, 'storage option used');
     is($altschema->resultset('Orders')->search({id => '88888888-8888-8888-8888-888888888888'})->count, 1, 'order found in alt storage');
     is($schema->resultset('Orders')->search({id => '88888888-8888-8888-8888-888888888888'})->count, 0, 'alt order not in class storage');

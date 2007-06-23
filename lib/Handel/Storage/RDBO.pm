@@ -284,7 +284,7 @@ sub delete {
     };
 
     return $delete;
-};  
+};
 
 sub delete_items {
     my ($self, $result, $filter) = @_;
@@ -555,6 +555,11 @@ sub _configure_schema_instance {
                 'inflate',
                 sub {
                     my ($row, $value) = @_;
+
+                    if (blessed $value && $value->isa('Data::Currency')) {
+                        $value =  $value->value;
+                    };
+
                     my $codecolumn = $self->can('currency_code_column')->($self);
                     my $storagecode = $self->can('currency_code')->($self);
                     my $code;
