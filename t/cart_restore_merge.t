@@ -52,7 +52,7 @@ sub run {
         is($cart->name, 'Cart 1', 'got name');
         is($cart->description, 'Test Temp Cart 1', 'got description');
         is($cart->count, 2, 'has 2 items');
-        is($cart->subtotal, 5.55, 'subtotal is 5.55');
+        is($cart->subtotal+0, 5.55, 'subtotal is 5.55');
         if ($subclass ne 'Handel::Cart') {
             #is($cart->custom, 'custom', 'got custom field');
         };
@@ -68,9 +68,9 @@ sub run {
         is($item1->cart, $cart->id, 'cart id is set');
         is($item1->sku, 'SKU1111', 'got sku');
         is($item1->quantity, 1, 'quantity is 1');
-        is($item1->price, 1.11, 'price is 1.11');
+        is($item1->price+0, 1.11, 'price is 1.11');
         is($item1->description, 'Line Item SKU 1', 'got description');
-        is($item1->total, 1.11, 'total is 1.11');
+        is($item1->total+0, 1.11, 'total is 1.11');
         if ($itemclass ne 'Handel::Cart::Item') {
             #is($item1->custom, 'custom', 'got custom field');
         };
@@ -82,9 +82,9 @@ sub run {
         is($item2->cart, $cart->id, 'cart id is set');
         is($item2->sku, 'SKU2222', 'got sku');
         is($item2->quantity, 2, 'quantity is 2');
-        is($item2->price, 2.22, 'price is 2.22');
+        is($item2->price+0, 2.22, 'price is 2.22');
         is($item2->description, 'Line Item SKU 2', 'got description');
-        is($item2->total, 4.44, 'total is 4.44');
+        is($item2->total+0, 4.44, 'total is 4.44');
         if ($itemclass ne 'Handel::Cart::Item') {
             #is($item2->custom, 'custom', 'got custom field');
         };
@@ -105,7 +105,7 @@ sub run {
         is($saved->name, 'Cart 3', 'got name');
         is($saved->description, 'Saved Cart 1', 'got description');
         is($saved->count, 2, 'has 2 items');
-        is($saved->subtotal, 45.51, 'subtotal is 45.51');
+        is($saved->subtotal+0, 45.51, 'subtotal is 45.51');
         if ($subclass ne 'Handel::Cart') {
             #is($saved->custom, 'custom', 'got custom field');
         };
@@ -121,9 +121,9 @@ sub run {
         is($item3->cart, $saved->id, 'cart id is set');
         is($item3->sku, 'SKU4444', 'got sku');
         is($item3->quantity, 4, 'quantity is 4');
-        is($item3->price, 4.44, 'price is 4.44');
+        is($item3->price+0, 4.44, 'price is 4.44');
         is($item3->description, 'Line Item SKU 4', 'got description');
-        is($item3->total, 17.76, 'total is 17.76');
+        is($item3->total+0, 17.76, 'total is 17.76');
         if ($itemclass ne 'Handel::Cart::Item') {
             #is($item3->custom, 'custom', 'got custom field');
         };
@@ -135,9 +135,9 @@ sub run {
         is($item4->cart, $saved->id, 'cart id is set');
         is($item4->sku, 'SKU1111', 'got sku');
         is($item4->quantity, 5, 'quantiy is 5');
-        is($item4->price, 5.55, 'price is 5.55');
+        is($item4->price+0, 5.55, 'price is 5.55');
         is($item4->description, 'Line Item SKU 5', 'got description');
-        is($item4->total, 27.75, 'total is 27.75');
+        is($item4->total+0, 27.75, 'total is 27.75');
         if ($itemclass ne 'Handel::Cart::Item') {
             #is($item4->custom, 'custom', 'got custom field');
         };
@@ -148,7 +148,7 @@ sub run {
         is($cart->name, 'Cart 1', 'got name');
         is($cart->description, 'Test Temp Cart 1', 'got description');
         is($cart->count, 3, 'has 3 items');
-        is($cart->subtotal, 28.86, 'total is 28.86');
+        is($cart->subtotal+0, 28.86, 'total is 28.86');
         if ($subclass ne 'Handel::Cart') {
             #is($cart->custom, 'custom', 'got custom field');
         };
@@ -164,9 +164,9 @@ sub run {
         is($item5->cart, $cart->id, 'cart id is set');
         is($item5->sku, 'SKU1111', 'got sku');
         is($item5->quantity, 6, 'quantity is 6');
-        is($item5->price, 1.11, 'price is 1.11');
+        is($item5->price+0, 1.11, 'price is 1.11');
         is($item5->description, 'Line Item SKU 1', 'got description');
-        is($item5->total, 6.66, 'total is 6.66');
+        is($item5->total+0, 6.66, 'total is 6.66');
         if ($itemclass ne 'Handel::Cart::Item') {
             #is($item5->custom, 'custom', 'got custom field');
         };
@@ -178,9 +178,9 @@ sub run {
         is($item6->cart, $cart->id, 'cart id is set');
         is($item6->sku, 'SKU2222', 'got sku');
         is($item6->quantity, 2, 'quantity is 2');
-        is($item6->price, 2.22, 'price is 2.22');
+        is($item6->price+0, 2.22, 'price is 2.22');
         is($item6->description, 'Line Item SKU 2', 'got description');
-        is($item6->total, 4.44, 'total is 4.44');
+        is($item6->total+0, 4.44, 'total is 4.44');
         if ($itemclass ne 'Handel::Cart::Item') {
             #is($item6->custom, 'custom', 'got custom field');
         };
@@ -192,9 +192,9 @@ sub run {
         is($item7->cart, $cart->id, 'cart id is set');
         is($item7->sku, 'SKU4444', 'got sku');
         is($item7->quantity, 4, 'quantity is 4');
-        is($item7->price, 4.44, 'price is 4.44');
+        is($item7->price+0, 4.44, 'price is 4.44');
         is($item7->description, 'Line Item SKU 4', 'got description');
-        is($item7->total, 17.76, 'total is 17.76');
+        is($item7->total+0, 17.76, 'total is 17.76');
         if ($itemclass ne 'Handel::Cart::Item') {
             #is($item7->custom, 'custom', 'got custom field');
         };
@@ -215,7 +215,7 @@ sub run {
         is($saved2->name, 'Cart 3', 'got name');
         is($saved2->description, 'Saved Cart 1', 'got description');
         is($saved2->count, 2, 'has 2 items');
-        is($saved2->subtotal, 45.51, 'subtotal is 45.51');
+        is($saved2->subtotal+0, 45.51, 'subtotal is 45.51');
         if ($subclass ne 'Handel::Cart') {
             #is($saved2->custom, 'custom', 'got custom field');
         };
@@ -231,9 +231,9 @@ sub run {
         is($item9->cart, $saved2->id, 'cart id is set');
         is($item9->sku, 'SKU4444', 'got sku');
         is($item9->quantity, 4, 'quantity is 4');
-        is($item9->price, 4.44, 'price is 4.44');
+        is($item9->price+0, 4.44, 'price is 4.44');
         is($item9->description, 'Line Item SKU 4', 'got description');
-        is($item9->total, 17.76, 'total is 17.76');
+        is($item9->total+0, 17.76, 'total is 17.76');
         if ($itemclass ne 'Handel::Cart::Item') {
             #is($item9->custom, 'custom', 'got custom field');
         };
@@ -245,9 +245,9 @@ sub run {
         is($item10->cart, $saved2->id, 'cart id is set');
         is($item10->sku, 'SKU1111', 'got sku');
         is($item10->quantity, 5, 'quantity is 5');
-        is($item10->price, 5.55, 'price is 5.55');
+        is($item10->price+0, 5.55, 'price is 5.55');
         is($item10->description, 'Line Item SKU 5', 'got description');
-        is($item10->total, 27.75, 'price is 27.75');
+        is($item10->total+0, 27.75, 'price is 27.75');
         if ($itemclass ne 'Handel::Cart::Item') {
             #is($item10->custom, 'custom', 'got custom field');
         };

@@ -66,10 +66,10 @@ sub run {
 
         my $related_items = $cart->count;
         is($related_items, 1, 'has 1 item');
-        is($cart->subtotal, 9.99, 'subtotal is 9.99');
+        is($cart->subtotal+0, 9.99, 'subtotal is 9.99');
         is($cart->delete({sku => 'SKU3333'}), 1, 'deleted sku3333');
         is($cart->count, 0, 'has 0 items');
-        is($cart->subtotal, 0, 'subtotal is 0');
+        is($cart->subtotal+0, 0, 'subtotal is 0');
 
         my $reit = $subclass->search({
             id => '22222222-2222-2222-2222-222222222222'
@@ -81,7 +81,7 @@ sub run {
         isa_ok($recart, 'Handel::Cart');
         isa_ok($recart, $subclass);
         is($recart->count, 0, 'has 0 items');
-        is($recart->subtotal, 0.00, 'subtotal is 0');
+        is($recart->subtotal+0, 0.00, 'subtotal is 0');
 
         my $remaining_items = $schema->resultset('CartItems')->count;
         is($remaining_items, $total_items - $related_items, 'other items still in table');
@@ -105,10 +105,10 @@ sub run {
 
         my $related_items = $cart->count;
         is($related_items, 2, 'has 2 items');
-        is($cart->subtotal, 45.51, 'subtotal is 45.51');
+        is($cart->subtotal+0, 45.51, 'subtotal is 45.51');
         ok($cart->delete({sku => 'SKU%'}), 'deleted SKU%');
         is($cart->count, 0, 'has 0 items');
-        is($cart->subtotal, 0, 'subtotal is 0');
+        is($cart->subtotal+0, 0, 'subtotal is 0');
 
         my $reit = $subclass->search({
             id => '33333333-3333-3333-3333-333333333333'
@@ -120,7 +120,7 @@ sub run {
         isa_ok($recart, 'Handel::Cart');
         isa_ok($recart, $subclass);
         is($recart->count, 0, 'has 0 items');
-        is($recart->subtotal, 0.00, 'subtotal is 0');
+        is($recart->subtotal+0, 0.00, 'subtotal is 0');
 
         my $remaining_items = $schema->resultset('CartItems')->count;
         is($remaining_items, $total_items - $related_items, 'table still has unrelated items');

@@ -71,7 +71,7 @@ sub run {
 
         my $related_items = $cart->count;
         is($related_items, 1, 'has 1 item');
-        is($cart->subtotal, 9.99, 'subtotal is 9.99');
+        is($cart->subtotal+0, 9.99, 'subtotal is 9.99');
 
         $cart->destroy;
 
