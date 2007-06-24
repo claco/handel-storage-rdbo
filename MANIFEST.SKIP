@@ -16,3 +16,4 @@ t/SMOKE$
 \b_build
 Build.PL
 Build.bat
+\.tws$
