@@ -3,7 +3,10 @@ Revision history for Handel-Storage-RDBO
 1.00000
     - Converted to Module::Install
     - Updated tests after Handel Currency changes
-    - inflate trigger now handles blessed currency objects
+    - Inflate trigger now handles blessed currency objects
+    - Storage classes now cache/reuse same Rose::DB
+    - Item operations in storae now share pae Rose::DB object
+    - Added checkout tests
     - Removed t/style_critic_tests. ETOOMUCHWORKFORLITTLEBENEFIT
 
 0.01_02 Thur Dec 21 12:29:00 2006

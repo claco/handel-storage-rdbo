@@ -6,12 +6,13 @@ use warnings;
 BEGIN {
     use lib 't/lib';
     use Handel::Test;
+    use Scalar::Util qw/refaddr/;
 
     eval 'require DBD::SQLite';
     if($@) {
         plan skip_all => 'DBD::SQLite not installed';
     } else {
-        plan tests => 119;
+        plan tests => 120;
     };
 
     use_ok('Handel::Test::RDBO::Cart');
@@ -102,6 +103,8 @@ sub run {
         if ($itemclass ne 'Handel::Cart::Item') {
             #is($item->custom, 'custom', 'got custom');
         };
+
+        is(refaddr $cart->result->storage_result->db, refaddr $item->result->storage_result->db);
 
         is($cart->count, 3, 'count is 3');
         is($cart->subtotal+0, 7.77, 'subtotal is 7.77');

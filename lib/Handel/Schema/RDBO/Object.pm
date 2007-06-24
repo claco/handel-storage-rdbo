@@ -9,7 +9,14 @@ BEGIN {
 };
 
 sub init_db {
-    return Handel::Schema::RDBO::DB->get_db;
+    my $class = shift;
+
+    no strict 'refs';
+    if (! ${"$class\:\:DB"}) {
+        ${"$class\:\:DB"} = Handel::Schema::RDBO::DB->get_db;
+    };
+
+    return ${"$class\:\:DB"};
 };
 
 1;

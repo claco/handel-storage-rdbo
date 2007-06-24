@@ -39,6 +39,24 @@ sub update {
     return $self->storage_result->save;
 };
 
+sub txn_begin {
+    my $self = shift;
+
+    return $self->storage->txn_begin($self);
+};
+
+sub txn_commit {
+    my $self = shift;
+
+    return $self->storage->txn_commit($self);
+};
+
+sub txn_rollback {
+    my $self = shift;
+
+    return $self->storage->txn_rollback($self);
+};
+
 sub AUTOLOAD {
     my $self = shift;
     return if (our $AUTOLOAD) =~ /::DESTROY$/;
@@ -105,6 +123,18 @@ storage.
 =head2 discard_changes
 
 Discards all changes made since the last successful update.
+
+=head2 txn_begin
+
+Starts a transaction on the current db object.
+
+=head2 txn_commit
+
+Commits the current transaction on the current db object.
+
+=head2 txn_rollback
+
+Rolls back the current transaction on the current db object.
 
 =head2 update
 

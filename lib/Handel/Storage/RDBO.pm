@@ -4,7 +4,7 @@ use warnings;
 use strict;
 use vars qw/$VERSION/;
 
-$VERSION = '0.01_03';
+$VERSION = '1.00000';
 
 BEGIN {
     use base qw/Handel::Storage/;
@@ -79,7 +79,7 @@ sub add_item {
 
     my $item;
     eval {
-        $item = $relationship->class->new(%{$data});
+        $item = $relationship->class->new(%{$data}, db => $result->storage_result->db);
         $item->save
     };
     if ($@) {
@@ -225,6 +225,7 @@ sub count_items {
     my $count = 0;
     eval {
         $count = Rose::DB::Object::Manager->get_objects_count(
+            db => $result->storage_result->db,            
             object_class => $relationship->class,
             query        => [%{$filter}]
         );
@@ -316,6 +317,7 @@ sub delete_items {
     my $delete;
     eval {
         $delete = Rose::DB::Object::Manager->delete_objects(
+            db => $result->storage_result->db,            
             object_class => $relationship->class,
             where        => [%{$filter}]
         );
@@ -465,6 +467,7 @@ sub search_items {
     my $resultset;
     eval {
         $resultset = Rose::DB::Object::Manager->get_objects(
+            db => $result->storage_result->db,
             object_class => $relationship->class,
             query        => [%{$filter}],
             %{$options}
