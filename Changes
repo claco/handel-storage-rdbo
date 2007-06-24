@@ -1,6 +1,6 @@
 Revision history for Handel-Storage-RDBO
 
-1.00000
+1.00000 Sun June 24 08:57:22 2007
     - Converted to Module::Install
     - Updated tests after Handel Currency changes
     - Inflate trigger now handles blessed currency objects
