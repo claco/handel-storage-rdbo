@@ -1,5 +1,9 @@
 Revision history for Handel-Storage-RDBO
 
+1.00001 Fri July 20 21:42:19 2007
+    - Fixed test schema to actually use Handel 1.0 schema
+    - Changed tests over to TEST_AUTHOR
+
 1.00000 Sun June 24 08:57:22 2007
     - Converted to Module::Install
     - Updated tests after Handel Currency changes
