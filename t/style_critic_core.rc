@@ -1,4 +1,6 @@
 # $Id$
+[-Subroutines::RequireArgUnpacking]
+
 # Remember to Id keyword our files
 [Miscellanea::RequireRcsKeywords]
 keywords = Id
