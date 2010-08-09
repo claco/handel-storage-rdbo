@@ -8,11 +8,11 @@ license 'perl';
 perl_version '5.008001';
 all_from 'lib/Handel/Storage/RDBO.pm';
 
-requires 'Clone';
+requires 'Clone'            => '0.31';
 requires 'Handel'           => '1.00013';
-requires 'Rose::DB'         => '0.734';
-requires 'Rose::DB::Object' => '0.764';
-requires 'Rose::Object'     => '0.84';
+requires 'Rose::DB'         => '0.762';
+requires 'Rose::DB::Object' => '0.789';
+requires 'Rose::Object'     => '0.858';
 requires 'Scalar::Util';
 
 
