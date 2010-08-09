@@ -4,7 +4,7 @@ use warnings;
 use strict;
 use vars qw/$VERSION/;
 
-$VERSION = '1.00002';
+$VERSION = '1.00003';
 
 BEGIN {
     use base qw/Handel::Storage/;
