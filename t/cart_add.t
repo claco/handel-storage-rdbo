@@ -97,9 +97,9 @@ sub run {
         is($item->cart, $cart->id, 'cart is set');
         is($item->sku, 'SKU9999', 'got sku');
         is($item->quantity, 2, 'quantity is 2');
-        is($item->price+0, 1.11, 'price is 1.11');
+        cmp_currency($item->price+0, 1.11, 'price is 1.11');
         is($item->description, 'Line Item SKU 9', 'got description');
-        is($item->total+0, 2.22, 'total is 2.22');
+        cmp_currency($item->total+0, 2.22, 'total is 2.22');
         if ($itemclass ne 'Handel::Cart::Item') {
             #is($item->custom, 'custom', 'got custom');
         };
@@ -107,7 +107,7 @@ sub run {
         is(refaddr $cart->result->storage_result->db, refaddr $item->result->storage_result->db);
 
         is($cart->count, 3, 'count is 3');
-        is($cart->subtotal+0, 7.77, 'subtotal is 7.77');
+        cmp_currency($cart->subtotal+0, 7.77, 'subtotal is 7.77');
 
         my $reit = $subclass->search({
             id => '11111111-1111-1111-1111-111111111111'
@@ -129,9 +129,9 @@ sub run {
         is($reitem->cart, $cart->id, 'cart is set');
         is($reitem->sku, 'SKU9999', 'got sku');
         is($reitem->quantity, 2, 'quantity is 2');
-        is($reitem->price+0, 1.11, 'price is 1.11');
+        cmp_currency($reitem->price+0, 1.11, 'price is 1.11');
         is($reitem->description, 'Line Item SKU 9', 'got description');
-        is($reitem->total+0, 2.22, 'total is 2.22');
+        cmp_currency($reitem->total+0, 2.22, 'total is 2.22');
         if ($itemclass ne 'Handel::Cart::Item') {
             #is($item->custom, 'custom', 'got custom');
         };
@@ -171,15 +171,15 @@ sub run {
         is($item->cart, $cart->id, 'cart is set');
         is($item->sku, 'SKU8888', 'got sku');
         is($item->quantity, 1, 'quantity is 1');
-        is($item->price+0, 1.11, 'price is 1.11');
+        cmp_currency($item->price+0, 1.11, 'price is 1.11');
         is($item->description, 'Line Item SKU 8', 'got description');
-        is($item->total+0, 1.11, 'total is 1.11');
+        cmp_currency($item->total+0, 1.11, 'total is 1.11');
         if ($itemclass ne 'Handel::Cart::Item') {
             #is($item->custom, 'custom', 'got custom');
         };
 
         is($cart->count, 2, 'has 2 items');
-        is($cart->subtotal+0, 11.10, 'subtotal is 11.10');
+        cmp_currency($cart->subtotal+0, 11.10, 'subtotal is 11.10');
 
         my $recartit = $subclass->search({
             id => '22222222-2222-2222-2222-222222222222'
@@ -202,9 +202,9 @@ sub run {
         is($reitem->cart, $cart->id, 'cart is set');
         is($reitem->sku, 'SKU8888', 'sku is set');
         is($reitem->quantity, 1, 'quantity is 1');
-        is($reitem->price+0, 1.11, 'price is 1.11');
+        cmp_currency($reitem->price+0, 1.11, 'price is 1.11');
         is($reitem->description, 'Line Item SKU 8', 'got description');
-        is($reitem->total+0, 1.11, 'total is 1.11');
+        cmp_currency($reitem->total+0, 1.11, 'total is 1.11');
         if ($itemclass ne 'Handel::Cart::Item') {
             #is($item->custom, 'custom', 'got custom');
         };
@@ -243,12 +243,12 @@ sub run {
     is($item->cart, $cart->id, 'cart is set');
     is($item->sku, 'SKU8888', 'got sku');
     is($item->quantity, 1, 'quantity is 1');
-    is($item->price+0, 1.11, 'price is 1.11');
+    cmp_currency($item->price+0, 1.11, 'price is 1.11');
     is($item->description, 'Line Item SKU 8', 'got description');
-    is($item->total+0, 1.11, 'total is 1.11');
+    cmp_currency($item->total+0, 1.11, 'total is 1.11');
 
     is($cart->count, 3, 'has 3 items');
-    is($cart->subtotal+0, 12.21, 'subtotal is 12.21');
+    cmp_currency($cart->subtotal+0, 12.21, 'subtotal is 12.21');
 
     my $recartit = Handel::Test::RDBO::Cart->search({
         id => '22222222-2222-2222-2222-222222222222'
@@ -269,9 +269,9 @@ sub run {
     is($reitem->cart, $cart->id, 'cart is set');
     is($reitem->sku, 'SKU8888', 'got sku');
     is($reitem->quantity, 1, 'quantity is 1');
-    is($reitem->price+0, 1.11, 'price is 1.11');
+    cmp_currency($reitem->price+0, 1.11, 'price is 1.11');
     is($reitem->description, 'Line Item SKU 8', 'got description');
-    is($reitem->total+0, 1.11, 'total is 1.11');
+    cmp_currency($reitem->total+0, 1.11, 'total is 1.11');
 };
 
 
@@ -310,12 +310,12 @@ sub run {
     is($item->cart, $cart->id, 'cart is set');
     is($item->sku, 'SKU8888', 'got sku');
     is($item->quantity, 1, 'quantity is 1');
-    is($item->price+0, 0, 'price is 0');
+    cmp_currency($item->price+0, 0, 'price is 0');
     is($item->description, undef, 'no description');
-    is($item->total+0, 0, 'total is 0');
+    cmp_currency($item->total+0, 0, 'total is 0');
 
     is($cart->count, 4, 'has 4 items');
-    is($cart->subtotal+0, 12.21, 'subtotal 12.21');
+    cmp_currency($cart->subtotal+0, 12.21, 'subtotal 12.21');
 
     my $recartit = Handel::Test::RDBO::Cart->search({
         id => '22222222-2222-2222-2222-222222222222'
@@ -336,7 +336,7 @@ sub run {
     is($reitem->cart, $cart->id, 'cart is set');
     is($reitem->sku, 'SKU8888', 'got sku');
     is($reitem->quantity, 1, 'quantity is 1');
-    is($reitem->price+0, 0, 'price is 0');
+    cmp_currency($reitem->price+0, 0, 'price is 0');
     is($reitem->description, undef, 'no description');
-    is($reitem->total+0, 0, 'total is 0');
+    cmp_currency($reitem->total+0, 0, 'total is 0');
 };

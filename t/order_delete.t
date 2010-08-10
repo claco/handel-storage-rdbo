@@ -65,14 +65,14 @@ sub run {
 
         my $related_items = $order->count;
         is($related_items, 1);
-        is($order->subtotal+0, 5.55);
+        cmp_currency($order->subtotal+0, 5.55);
         if ($subclass ne 'Handel::Order') {
             #is($order->custom, 'custom');
         };
 
         is($order->delete({sku => 'SKU3333'}), 1);
         is($order->count, 0);
-        is($order->subtotal+0, 5.55);
+        cmp_currency($order->subtotal+0, 5.55);
 
         my $reit = $subclass->search({
             id => '22222222-2222-2222-2222-222222222222'
@@ -84,7 +84,7 @@ sub run {
         isa_ok($reorder, 'Handel::Order');
         isa_ok($reorder, $subclass);
         is($reorder->count, 0);
-        is($reorder->subtotal+0, 5.55);
+        cmp_currency($reorder->subtotal+0, 5.55);
         if ($subclass ne 'Handel::Order') {
             #is($reorder->custom, 'custom');
         };
@@ -110,14 +110,14 @@ sub run {
 
         my $related_items = $order->count;
         is($related_items, 2);
-        is($order->subtotal+0, 5.55);
+        cmp_currency($order->subtotal+0, 5.55);
         if ($subclass ne 'Handel::Order') {
             #is($order->custom, 'custom');
         };
 
         ok($order->delete({sku => 'SKU%'}));
         is($order->count, 0);
-        is($order->subtotal+0, 5.55);
+        cmp_currency($order->subtotal+0, 5.55);
 
         my $reit = $subclass->search({
             id => '11111111-1111-1111-1111-111111111111'
@@ -129,7 +129,7 @@ sub run {
         isa_ok($reorder, 'Handel::Order');
         isa_ok($reorder, $subclass);
         is($reorder->count, 0);
-        is($reorder->subtotal+0, 5.55);
+        cmp_currency($reorder->subtotal+0, 5.55);
         if ($subclass ne 'Handel::Order') {
             #is($reorder->custom, 'custom');
         };

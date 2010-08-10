@@ -1,10 +1,14 @@
 Revision history for Handel-Storage-RDBO
 
-1.00002 Sat Han 19 23:18:23 2008
+1.00003 Mon  Aug 09 22:13:27 2010
+	- Fixed failing tests under uselongdouble
+	- Tested with latest RDBO modules
+	- Tested in 5.8.9, 5.10.1, 5.12.1
+
+1.00002 Sat Jan 19 23:18:23 2008
     - Tested with latest RDBO Components
     - Fixed META.yml syntax (Author)
     - Fixed Perl::Critic tests
-
 
 1.00001 Fri July 20 21:42:19 2007
     - Fixed test schema to actually use Handel 1.0 schema
